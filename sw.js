@@ -1,5 +1,10 @@
 const CACHE = 'taf-v1';
-const ASSETS = ['/', '/index.html', '/manifest.json'];
+const BASE = '/finanze';
+const ASSETS = [
+  BASE + '/',
+  BASE + '/index.html',
+  BASE + '/manifest.json'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -22,7 +27,7 @@ self.addEventListener('fetch', e => {
       const fresh = fetch(e.request).then(res => {
         if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
         return res;
-      }).catch(() => cached);
+      }).catch(() => cached || caches.match(BASE + '/index.html'));
       return cached || fresh;
     })
   );
